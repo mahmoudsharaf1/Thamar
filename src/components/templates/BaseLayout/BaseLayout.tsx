@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 
-// import { KeyboardAvoidingView } from "@components";
 import { spacing } from "@theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./styles";
@@ -22,7 +21,6 @@ type BaseLayoutProps = {
   padding?: boolean;
   paddingVertical?: boolean;
   paddingHorizontal?: boolean;
-  transparent?: boolean;
   testID?: string;
   bodyStyle?: any;
   contentContainerStyle?: any;
@@ -39,7 +37,6 @@ export const BaseLayout = (props: BaseLayoutProps) => {
     padding = true,
     paddingVertical = true,
     paddingHorizontal = true,
-    transparent = false,
     bodyStyle,
     contentContainerStyle,
   } = props;
@@ -48,11 +45,6 @@ export const BaseLayout = (props: BaseLayoutProps) => {
     () => (safeAreaView ? SafeAreaView : View),
     [safeAreaView],
   );
-
-  // const KeyboardContainer = useMemo(
-  //   () => (keyboard ? KeyboardAvoidingView : View),
-  //   [keyboard],
-  // );
 
   const ScrollContainer = useMemo(() => (scroll ? ScrollView : View), [scroll]);
 

@@ -1,50 +1,40 @@
-# Welcome to your Expo app 👋
+# Thamar Investment App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## State Management Across Screens
 
-## Get started
+The app uses a **global state** managed via **React Context** and `useReducer` (`WalletContext`).
 
-1. Install dependencies
+- `WalletProvider` wraps the entire app, providing access to the state and a `dispatch` function.
+- Screens consume the state using the `useWallet` hook.
+- Actions like `"INIT_DATA"`, `"INVEST"`, and `"DEPOSIT"` update balances and transactions globally.
 
-   ```bash
-   npm install
-   ```
+**Screens & Usage:**
 
-2. Start the app
+1. **HomeDashboardScreen**
+   - Displays `availableBalance`, `investedBalance`, and `opportunities`.
+   - Navigating to an opportunity passes the selected item as a param.
 
-   ```bash
-   npx expo start
-   ```
+2. **OpportunityViewScreen**
+   - Uses `dispatch({ type: "INVEST", payload })` to perform investment.
+   - Updates `availableBalance`, `investedBalance`, and prepends a new transaction.
 
-In the output, you'll find options to open the app in a
+3. **WalletScreen**
+   - Shows current balances and a list of transactions from the global state.
+   - Automatically reflects any changes made by other screens.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Handling Money Values
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- All monetary values are stored as **numbers** in the global state.
+- Formatting for display is done via the `formatCurrency` utility, ensuring:
+  - Comma separators for thousands
+  - Two decimal places
+  - Consistent currency display (SAR) across screens
 
-## Get a fresh project
+- Calculations like `totalBalance = availableBalance + investedBalance` are computed dynamically on render, ensuring always up-to-date values.
 
-When you're ready, run:
+## Improvements with More Time
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Persist wallet state to **AsyncStorage** to retain data across app restarts.
+- Implement proper **error handling** and user feedback for failed investments.
+- Introduce **unit and integration tests** for reducer logic and screen components.
+- Optimize performance for large transaction lists using `VirtualizedList` enhancements.
